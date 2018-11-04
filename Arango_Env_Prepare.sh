@@ -2,7 +2,7 @@
 #   wget https://raw.githubusercontent.com/patelvijayg/ArangoDB/master/Arango_Env_Prepare.sh
 #   chmod +x ./Arango_Env_Prepare.sh && ./Arango_Env_Prepare.sh
 set -e
-docker rm -f arangodb
+docker rm -f arangodb || echo "***INGONE ABOVE ---- Error: No such container: arangodb"
 docker run -e ARANGO_NO_AUTH=1 -p 8529:8529 -d --name arangodb arangodb
 echo 'database is starting......wait for 10 second and dont enter any password'
 sleep 10
@@ -10,4 +10,4 @@ docker container exec -ti arangodb /bin/bash -c "export ARANGODB_DEFAULT_ROOT_PA
 wget -O - https://raw.githubusercontent.com/patelvijayg/ArangoDB/master/cities.json | curl -X POST --data-binary @- --dump - 'http://localhost:8529/_db/mydb/_api/import?collection=cities&type=documents'
 wget -O - https://raw.githubusercontent.com/patelvijayg/ArangoDB/master/roads.json | curl -X POST --data-binary @- --dump - 'http://localhost:8529/_db/mydb/_api/import?collection=roads&type=documents'
 
-echo 'Completed successfully'
+echo -e '\n \n \n Completed successfully'
