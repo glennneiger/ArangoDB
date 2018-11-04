@@ -1,0 +1,16 @@
+[
+{_key: "Mumbai", name:"Mumbai", state:"MH"},
+{_key: "Pune", name:"Pune", state:"MH"},
+{_key: "Nasik", name:"Nasik", state:"MH"},
+{_key: "Vapi", name:"Vapi", state:"GJ"},
+{_key: "Surat", name:"Surat", state:"GJ"},
+{_key: "Bharuch", name:"Bharuch", state:"GJ"},
+{_key: "Vadodara", name:"Vadodara", state:"GJ"},
+{_key: "Ahmedabad", name:"Ahmedabad", state:"GJ"},
+{_key: "Rajkot", name:"Rajkot", state:"GJ"},
+{_key: "Limbadi", name:"Limbadi", state:"GJ"},
+{_key: "Nadiad", name:"Nadiad", state:"GJ"},
+{_key: "Bagodara", name:"Bagodara", state:"GJ"},
+{_key: "Chotia", name:"Chotia", state:"GJ"}
+]
+
