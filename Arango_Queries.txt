@@ -26,3 +26,9 @@ FOR u IN roads
   FOR v, e, p IN 1..7 OUTBOUND "cities/Vadodara" roads
   FILTER v._id == "cities/Rajkot"
   RETURN CONCAT_SEPARATOR(" -> ", p.vertices[*]._key)  
+  
+  FOR v, e, p IN 1..15 OUTBOUND "cities/Pune" roads
+  FILTER v._id == "cities/Rajkot"
+  let lst= ({data:CONCAT_SEPARATOR(" -> ", p.vertices[*]._key),distance:SUM(p.edges[*].distance)})
+  sort lst.distance 
+  return lst
