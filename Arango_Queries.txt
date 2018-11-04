@@ -3,3 +3,26 @@
  
 FOR v, e  IN OUTBOUND SHORTEST_PATH 'cities/Vadodara' TO 'cities/Rajkot' GRAPH 'city_grapth'
 RETURN [CONCAT(e._from, " --> " , e._to,"   ",e.distance)]
+
+
+LET p = ( // Run one shortest Path
+  FOR v, e IN OUTBOUND SHORTEST_PATH 'cities/Vadodara' TO 'cities/Rajkot' GRAPH 'road_graph'
+  // We return objects with vertex, edge and weight for each vertex on the path
+  RETURN {vertex: v, edge: e, weight: e.distance}
+)
+FILTER LENGTH(p) > 0 // We only want shortest paths that actually exist
+RETURN { // We rebuild the old format
+  vertices: p[*].vertex.name,
+  edges: p[*].edge.distance,
+  distance: SUM(p[*].weight)
+}
+
+
+FOR u IN roads
+  COLLECT AGGREGATE shortest = MIN(u.distance), longest = MAX(u.distance), total=sum(u.distance)
+  RETURN {shortest, longest,total }
+
+
+  FOR v, e, p IN 1..7 OUTBOUND "cities/Vadodara" roads
+  FILTER v._id == "cities/Rajkot"
+  RETURN CONCAT_SEPARATOR(" -> ", p.vertices[*]._key)  

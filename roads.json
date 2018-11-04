@@ -7,7 +7,8 @@
 {"_from":"cities/Surat","_to":"cities/Bharuch","distance":71}
 {"_from":"cities/Bharuch","_to":"cities/Vadodara","distance":78}
 {"_from":"cities/Vadodara","_to":"cities/Nadiad","distance":65}
-{"_from":"cities/Nadiad","_to":"cities/Bagodara","distance":57}
+{"_from":"cities/Nadiad","_to":"cities/Kheda","distance":22}
+{"_from":"cities/Kheda","_to":"cities/Bagodara","distance":63}
 {"_from":"cities/Nadiad","_to":"cities/Ahmedabad","distance":77}
 {"_from":"cities/Ahmedabad","_to":"cities/Bagodara","distance":60}
 {"_from":"cities/Bagodara","_to":"cities/Limbadi","distance":41}
