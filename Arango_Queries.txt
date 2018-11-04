@@ -1,0 +1,5 @@
+//FOR v, e, p IN 1..10 OUTBOUND 'cities/Pune' GRAPH 'city_grapth'   FILTER e.distance>=50   RETURN p
+ 
+ 
+FOR v, e  IN OUTBOUND SHORTEST_PATH 'cities/Vadodara' TO 'cities/Rajkot' GRAPH 'city_grapth'
+RETURN [CONCAT(e._from, " --> " , e._to,"   ",e.distance)]
