@@ -1,0 +1,63 @@
+docker rm -f arangodb
+docker run -e ARANGO_NO_AUTH=1 -p 8529:8529 -d --name arangodb arangodb
+docker container exec -ti arangodb /bin/bash
+#docker container exec -ti arangodb sh -c 'apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E1DD270288B4E6030699E45FA1715D88E1DF1F24 && echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu trusty main" > /etc/apt/sources.list.d/git.list && apt-get update && apt-get install -y git && apt-get install -y vim && echo "packaged installed"' 
+echo "...."
+
+------------------------------------run after this
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E1DD270288B4E6030699E45FA1715D88E1DF1F24 && echo "deb http://ppa.launchpad.net/git-core/ppa/ubuntu trusty main" > /etc/apt/sources.list.d/git.list && apt-get update && apt-get install -y git && apt-get install -y vim && echo "packaged installed"
+#apt-get update && apt-get install -y git && apt-get install -y vim && echo "packaged installed" && git clone https://github.com/patelvijayg/scripts.git && cd scripts && chmod +x * && ./Arango_SampleDB_create.js && echo "Done"
+
+
+
+
+#to run for prepare arangodb
+docker container exec -ti arangodb sh -c "curl https://raw.githubusercontent.com/patelvijayg/scripts/master/Arango_SampleDB_create.js -o db.sh && echo '\n \n DO NOT ENTER ANY PASSWORD JUST HIT ENTER \n \n \n ' && chmod +x db.sh && ./db.sh"
+
+
+
+#single document
+echo '{"_key": "mumbai3", "name":"mumbai1", "state":"mh1"}' | curl -X POST --data-binary @- --dump - http://localhost:8529/_db/mydb/_api/document/cities
+
+#multiple document
+curl -X POST --data-binary @- --dump - 'http://localhost:8529/_db/mydb/_api/import?collection=cities&type=documents' <<EOF
+{"_key": "mumbai4", "name":"mumbai1", "state":"mh1"}
+{"_key": "mumbai5", "name":"mumbai2", "state":"mh2"}
+EOF
+
+wget -O - https://raw.githubusercontent.com/patelvijayg/ArangoDB/master/cities.json | curl -X POST --data-binary @- --dump - 'http://localhost:8529/_db/mydb/_api/import?collection=cities&type=documents'
+wget -O - https://raw.githubusercontent.com/patelvijayg/ArangoDB/master/Roads.json | curl -X POST --data-binary @- --dump - 'http://localhost:8529/_db/mydb/_api/import?collection=roads&type=documents'
+
+echo -e '{"_key": "mumbai4", "name":"mumbai1", "state":"mh1"} \n {"_key": "mumbai5", "name":"mumbai2", "state":"mh2"}' | curl -X POST --data-binary @- --dump - 'http://localhost:8529/_db/mydb/_api/import?collection=cities&type=documents'
+
+
+Web interface
+//insert {_key: "mumbai", name:"mumbai", state:"mh"} in cities
+//insert {_key: "pune", name:"pune", state:"mh"} in cities
+//insert {_key: "nagpur", name:"nagpur", state:"mh"} in cities
+//insert {_from:"cities/mumbai",_to:"cities/pune",name:"express way 1",distance:200} in roads
+//insert {_from:"cities/mumbai",_to:"cities/nagpur",name:"express way 1",distance:600} in roads
+
+#Rest API
+curl --dump - http://localhost:8529/_db/mydb/_api/document/cities/mumbai
+curl --dump - http://localhost:8529/_db/mydb/_api/collection/cities/count
+
+
+
+ARANGODB_DEFAULT_ROOT_PASSWORD
+#!/bin/bash
+docker rm -f arangodb
+docker run -e ARANGO_NO_AUTH=1 -p 8529:8529 -d --name arangodb arangodb
+docker container exec -ti arangodb sh -c "curl https://raw.githubusercontent.com/patelvijayg/scripts/master/Arango_SampleDB_create.js -o db.sh && echo '\n \n DO NOT ENTER ANY PASSWORD JUST HIT ENTER \n \n \n ' && chmod +x db.sh && ./db.sh"
+echo 'compeleted ..'
+
+
+
+ curl -X POST --data-binary @- --dump - http://localhost:8529/_api/explain <<EOF
+{ 
+  "query" : "FOR p IN products LET a = p.id FILTER a == 4 LET name = p.name SORT p.id LIMIT 1 RETURN name" 
+}
+EOF
+
+
+/usr/bin/arangosh --javascript.execute ./db.js --server.disable-authentication true
