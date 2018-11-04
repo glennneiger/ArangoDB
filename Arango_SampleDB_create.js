@@ -55,7 +55,7 @@ var roads = db._createEdgeCollection("roads");
 
 try{
 var Graph = require('@arangodb/general-graph');
-var g = Graph._create('city_grapth',[Graph._relation('roads', ['cities'], ['cities'])]);
+var g = Graph._create('road_graph',[Graph._relation('roads', ['cities'], ['cities'])]);
 {print("CREATING GRAPH")}
 }
 catch(e) {print("CREATING GRAPH .... error occur"+e)}

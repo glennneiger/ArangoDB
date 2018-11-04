@@ -9,7 +9,7 @@
 {"_from":"cities/Vadodara","_to":"cities/Nadiad","distance":65}
 {"_from":"cities/Nadiad","_to":"cities/Bagodara","distance":57}
 {"_from":"cities/Nadiad","_to":"cities/Ahmedabad","distance":77}
-{"_from":"cities/Ahmedabad","_to":"cities/Limbadi","distance":110}
+{"_from":"cities/Ahmedabad","_to":"cities/Bagodara","distance":60}
 {"_from":"cities/Bagodara","_to":"cities/Limbadi","distance":41}
 {"_from":"cities/Limbadi","_to":"cities/Chotia","distance":67}
 {"_from":"cities/Vadodara","_to":"cities/Ahmedabad","distance":113}
