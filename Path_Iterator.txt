@@ -1,0 +1,64 @@
+let totaldummynode=(
+FOR v, e, p IN 1..10 OUTBOUND "dummynode/1" GRAPH "dummygraph" FILTER v.delta==[]
+  return v
+  )
+//Just for information
+  let reverspath=(
+  for v1 in totaldummynode
+        FOR v, e, p IN 1..6 INBOUND v1._id GRAPH "dummygraph"
+        FILTER p.vertices[-1]._key=="1"
+        RETURN CONCAT_SEPARATOR(" <- ", p.vertices[*]._key)
+  )  
+
+let actualdummynode=unique(  
+  for v4 in totaldummynode
+   let totalchild=LENGTH(FOR v IN 0..10 OUTBOUND v4._id GRAPH "dummygraph" RETURN 1)
+   filter LENGTH(FOR v IN 0..10 OUTBOUND v4._id GRAPH "dummygraph" filter v.delta==[] return 1)==totalchild
+    RETURN v4)
+
+let actualdummyedge =unique(
+for nd1 in actualdummynode
+ for ed1 in dummyedge
+  filter ed1._from == nd1._id or ed1._to == nd1._id
+  remove ed1 in dummyedge OPTIONS { ignoreErrors: true }
+  return ed1
+  )
+
+let deletednode =(for doc2 in actualdummynode remove doc2 in dummynode return doc2)
+
+return {"deletededge":actualdummyedge,"deletednode":deletednode,"EmptyNodePath":reverspath}
+
+==========================================================
+
+for loopcounter in 1..1
+
+let nodeinsert=[
+{"_key":"1","field1":"A","range":1,"delta":[{"a":"1"}]},
+{"_key":"2","field1":"A","range":2,"delta":[]},
+{"_key":"3","field1":"A","range":3,"delta":[]},
+{"_key":"4","field1":"A","range":4,"delta":[{"a":"1"}]},
+{"_key":"5","field1":"A","range":5,"delta":[{"a":"1"}]},
+{"_key":"6","field1":"A","range":6,"delta":[]},
+{"_key":"7","field1":"A","range":7,"delta":[]},
+{"_key":"8","field1":"A","range":8,"delta":[]},
+{"_key":"9","field1":"A","range":9,"delta":[{"a":"1"}]},
+{"_key":"10","field1":"A","range":10,"delta":[{"a":"1"}]}
+]
+
+let edgeinsert=
+[
+{"_from":"dummynode/1","_to":"dummynode/2","desc":"1to2"},
+{"_from":"dummynode/1","_to":"dummynode/3","desc":"1to3"},
+{"_from":"dummynode/2","_to":"dummynode/4","desc":"2to4"},
+{"_from":"dummynode/2","_to":"dummynode/5","desc":"2to5"},
+{"_from":"dummynode/3","_to":"dummynode/6","desc":"3to6"},
+{"_from":"dummynode/3","_to":"dummynode/7","desc":"3to7"},
+{"_from":"dummynode/4","_to":"dummynode/8","desc":"4to8"},
+{"_from":"dummynode/5","_to":"dummynode/9","desc":"5to9"},
+{"_from":"dummynode/7","_to":"dummynode/10","desc":"7to10"}
+]
+
+//let f=( let del1=(for doc1 in dummynode remove doc1 in dummynode) let del2=(for doc2 in dummyedge remove doc2 in dummyedge) return {"deleted":true} )
+let f=( let in1=(for nnn in edgeinsert  insert nnn in dummyedge)  let in2=(for nnn in nodeinsert  insert nnn in dummynode)  return {"inserted":true} )
+
+return f

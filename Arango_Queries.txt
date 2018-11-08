@@ -1,3 +1,15 @@
+
+///Insert
+for loopcounter in 1..1
+
+//let del1=(for doc1 in node1 remove doc1 in node1)
+//let del2=(for doc2 in edge1 remove doc2 in edge1)
+let in1=(FOR n IN 1..15  INSERT {"_key":CONCAT("", n), "field1":CONCAT('value-', n), "range": n } IN node1)
+let in2=(FOR i IN 1..14  INSERT { "_from":CONCAT("node1","/", i),"_to":CONCAT("node1","/", i+1),"desc":CONCAT(i,"to", i+1)} in edge1)
+
+return loopcounter
+
+
 //FOR v, e, p IN 1..10 OUTBOUND 'cities/Pune' GRAPH 'city_grapth'   FILTER e.distance>=50   RETURN p
  
  
@@ -27,6 +39,7 @@ FOR u IN roads
   FILTER v._id == "cities/Rajkot"
   RETURN CONCAT_SEPARATOR(" -> ", p.vertices[*]._key)  
   
+  #Shortest distance
   FOR v, e, p IN 1..15 ANY "cities/Pune" roads
   FILTER v._id == "cities/Rajkot"
   let lst= ({path:CONCAT_SEPARATOR(" -> ", p.vertices[*]._key),distance:SUM(p.edges[*].distance),stops:count(p.edges[*]._id)})
