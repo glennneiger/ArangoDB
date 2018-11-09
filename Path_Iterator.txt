@@ -14,7 +14,7 @@ let actualdummynode=unique(
   for v4 in totaldummynode
    let totalchild=LENGTH(FOR v IN 0..10 OUTBOUND v4._id GRAPH "dummygraph" RETURN 1)
    filter LENGTH(FOR v IN 0..10 OUTBOUND v4._id GRAPH "dummygraph" filter v.delta==[] return 1)==totalchild
-    RETURN v4)
+    RETURN DISTINCT v4)
 
 let actualdummyedge =unique(
 for nd1 in actualdummynode
@@ -62,3 +62,69 @@ let edgeinsert=
 let f=( let in1=(for nnn in edgeinsert  insert nnn in dummyedge)  let in2=(for nnn in nodeinsert  insert nnn in dummynode)  return {"inserted":true} )
 
 return f
+
+
+----------------------------------
+let nodeinsert=[
+{"_key": "0","name":"zero","value":"0"},
+{"_key": "1","name":"one","value":"1"},
+{"_key": "2","name":"two","value":"2"},
+{"_key": "3","name":"three","value":"3"},
+{"_key": "11","name":"eleven","value":"11"},
+{"_key": "12","name":"twelve","value":"12"},
+{"_key": "13","name":"thirteen","value":"13"},
+{"_key": "21","name":"twenty-one","value":"21"},
+{"_key": "22","name":"twenty-two","value":"22"},
+{"_key": "31","name":"thirty-one","value":"31"},
+{"_key": "32","name":"thirty-two","value":"32"},
+{"_key": "33","name":"thirty-three","value":"33"},
+{"_key": "34","name":"thirty-four","value":"34"},
+{"_key": "111","name":"one hundred eleven","value":"111"},
+{"_key": "112","name":"one hundred twelve","value":"112"},
+{"_key": "121","name":"one hundred twenty-one","value":"121"},
+{"_key": "122","name":"one hundred twenty-two","value":"122"},
+{"_key": "131","name":"one hundred thirty-one","value":"131"},
+{"_key": "211","name":"two hundred eleven","value":"211"},
+{"_key": "212","name":"two hundred twelve","value":"212"},
+{"_key": "221","name":"two hundred twenty-one","value":"221"},
+{"_key": "1111","name":"one thousand one hundred eleven","value":"1111"},
+{"_key": "1112","name":"one thousand one hundred twelve","value":"1112"},
+{"_key": "11111","name":"eleven thousand one hundred eleven","value":"11111"},
+{"_key": "11112","name":"eleven thousand one hundred twelve","value":"11112"},
+{"_key": "111111","name":"one hundred eleven thousand one hundred eleven","value":"111111"},
+{"_key": "1111111","name":"one million one hundred eleven thousand one hundred eleven","value":"1111111"},
+{"_key": "11111111","name":"eleven million one hundred eleven thousand one hundred eleven","value":"11111111"}]
+
+let edgeinsert=
+[
+{"_from":"numbernode/0","_to":"numbernode/1","path":"0 -> 1"},
+{"_from":"numbernode/0","_to":"numbernode/2","path":"0 -> 2"},
+{"_from":"numbernode/0","_to":"numbernode/3","path":"0 -> 3"},
+{"_from":"numbernode/1","_to":"numbernode/11","path":"1 -> 11"},
+{"_from":"numbernode/1","_to":"numbernode/12","path":"1 -> 12"},
+{"_from":"numbernode/1","_to":"numbernode/13","path":"1 -> 13"},
+{"_from":"numbernode/2","_to":"numbernode/21","path":"2 -> 21"},
+{"_from":"numbernode/2","_to":"numbernode/22","path":"2 -> 22"},
+{"_from":"numbernode/3","_to":"numbernode/31","path":"3 -> 31"},
+{"_from":"numbernode/3","_to":"numbernode/32","path":"3 -> 32"},
+{"_from":"numbernode/3","_to":"numbernode/33","path":"3 -> 33"},
+{"_from":"numbernode/3","_to":"numbernode/34","path":"3 -> 34"},
+{"_from":"numbernode/11","_to":"numbernode/111","path":"11 -> 111"},
+{"_from":"numbernode/11","_to":"numbernode/112","path":"11 -> 112"},
+{"_from":"numbernode/12","_to":"numbernode/121","path":"12 -> 121"},
+{"_from":"numbernode/12","_to":"numbernode/122","path":"12 -> 122"},
+{"_from":"numbernode/13","_to":"numbernode/131","path":"13 -> 131"},
+{"_from":"numbernode/21","_to":"numbernode/211","path":"21 -> 211"},
+{"_from":"numbernode/21","_to":"numbernode/212","path":"21 -> 212"},
+{"_from":"numbernode/22","_to":"numbernode/221","path":"22 -> 221"},
+{"_from":"numbernode/111","_to":"numbernode/1111","path":"111 -> 1111"},
+{"_from":"numbernode/111","_to":"numbernode/1112","path":"111 -> 1112"},
+{"_from":"numbernode/1111","_to":"numbernode/11111","path":"1111 -> 11111"},
+{"_from":"numbernode/1111","_to":"numbernode/11112","path":"1111 -> 11112"},
+{"_from":"numbernode/11111","_to":"numbernode/111111","path":"11111 -> 111111"},
+{"_from":"numbernode/111111","_to":"numbernode/1111111","path":"111111 -> 1111111"},
+{"_from":"numbernode/1111111","_to":"numbernode/11111111","path":"1111111 -> 11111111"}]
+
+let f=( let in1=(for nnn in edgeinsert  insert nnn in numberedge)  let in2=(for nnn in nodeinsert  insert nnn in numbernode)  return {"inserted":true} )
+return f
+-----------------------

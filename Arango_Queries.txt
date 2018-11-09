@@ -17,12 +17,11 @@ FOR v, e  IN OUTBOUND SHORTEST_PATH 'cities/Vadodara' TO 'cities/Rajkot' GRAPH '
 RETURN [CONCAT(e._from, " --> " , e._to,"   ",e.distance)]
 
 
-LET p = ( // Run one shortest Path
+LET p = ( 
   FOR v, e IN OUTBOUND SHORTEST_PATH 'cities/Vadodara' TO 'cities/Rajkot' GRAPH 'road_graph'
-  // We return objects with vertex, edge and weight for each vertex on the path
   RETURN {vertex: v, edge: e, weight: e.distance}
 )
-FILTER LENGTH(p) > 0 // We only want shortest paths that actually exist
+FILTER LENGTH(p) > 0 
 RETURN { // We rebuild the old format
   vertices: p[*].vertex.name,
   edges: p[*].edge.distance,
@@ -45,3 +44,33 @@ FOR u IN roads
   let lst= ({path:CONCAT_SEPARATOR(" -> ", p.vertices[*]._key),distance:SUM(p.edges[*].distance),stops:count(p.edges[*]._id)})
   sort lst.distance 
   return lst
+  
+------------------------------
+#User and likes count category wise
+let categorieslikes=(let al=( for u in users return u.likes ) return unique(FLATTEN(al)))
+
+let likesandusers= (
+for lks in first(categorieslikes)
+ for u in users
+   filter lks in u.likes
+    return {"likes":lks,"user":concat(u.name.first," " ,u.name.last)})
+
+let finalresult=(
+for u in likesandusers
+ collect likes=u.likes into group1
+ return {"likes":likes,"users":count(group1[*].u.user),"username":group1[*].u.user})
+
+for r in finalresult
+sort r.users desc
+return r
+
+
+
+------------------finding sibling at same level-----
+
+let level=count((FOR v, e, p IN 0..10 INBOUND "numbernode/111" GRAPH "numbergraph"
+return p.vertices[*]._key))
+let m1=level
+let m2=level
+//return merge({"m1":m1,"level":level})
+FOR v, e, p IN m1..m2 OUTBOUND "numbernode/0" GRAPH "numbergraph" RETURN CONCAT_SEPARATOR(" -> ", p.vertices[*]._key)
